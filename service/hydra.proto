@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+service Hydra {
+    rpc Execute(stream Event) returns (stream RuntimeStartRequest);
+    rpc ListNodes(NodeListRequest) returns (stream Node);
+}
+
+enum Runtime {
+    GOLANG = 0;
+    PYTHON = 1;
+}
+
+enum Status {
+    IDLE = 0;
+    RUNNING = 1;
+}
+
+message Node {
+    string id = 1;
+    Runtime runtime = 2;
+    Status status = 3;
+}
+
+message NodeListRequest {}
+
+message Event {
+    oneof request {
+        NodeStatusRequest nodeStatusRequest = 1;
+        NodeRegistrationRequest nodeRegistrationRequest = 2;
+    }
+}
+
+message NodeRegistrationRequest {
+    Runtime runtime = 1;
+    Status status = 2;
+}
+
+message RuntimeStartRequest {
+    string payload = 1;
+}
+
+message NodeStatusRequest {
+    Status status = 1;
+}
