@@ -43,6 +43,9 @@ to quickly create a Cobra application.`,
 		}
 		grpcServer := grpc.NewServer()
 
+		defer listener.Close()
+		defer grpcServer.Stop()
+
 		hydrarpc.RegisterHydraServer(grpcServer, &hydraserver.HydraService{})
 
 		grpcServer.Serve(listener)

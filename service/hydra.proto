@@ -11,7 +11,7 @@ enum Runtime {
 }
 
 enum Status {
-    IDLE = 0;
+    READY = 0;
     RUNNING = 1;
 }
 
@@ -24,13 +24,13 @@ message Node {
 message NodeListRequest {}
 
 message Event {
-    oneof request {
-        NodeStatusRequest nodeStatusRequest = 1;
-        NodeRegistrationRequest nodeRegistrationRequest = 2;
+    oneof message {
+        NodeStatusMessage nodeStatusMessage = 1;
+        NodeRegistrationMessage nodeRegistrationMessage = 2;
     }
 }
 
-message NodeRegistrationRequest {
+message NodeRegistrationMessage {
     Runtime runtime = 1;
     Status status = 2;
 }
@@ -39,6 +39,6 @@ message RuntimeStartRequest {
     string payload = 1;
 }
 
-message NodeStatusRequest {
+message NodeStatusMessage {
     Status status = 1;
 }

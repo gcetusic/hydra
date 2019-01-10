@@ -31,14 +31,14 @@ func Run() error {
 				return
 			}
 			if err != nil {
-				log.Fatalf("Failed to receive a note : %v", err)
+				log.Fatalf("Failed to receive a message : %v", err)
 			}
 		}
 	}()
 
 	registrationEvent := &hydrarpc.Event{
-		Request: &hydrarpc.Event_NodeRegistrationRequest{
-			NodeRegistrationRequest: &hydrarpc.NodeRegistrationRequest{
+		Message: &hydrarpc.Event_NodeRegistrationMessage{
+			NodeRegistrationMessage: &hydrarpc.NodeRegistrationMessage{
 				Runtime: hydrarpc.Runtime_GOLANG,
 			},
 		},
@@ -49,8 +49,8 @@ func Run() error {
 	}
 
 	runningStatusEvent := &hydrarpc.Event{
-		Request: &hydrarpc.Event_NodeStatusRequest{
-			NodeStatusRequest: &hydrarpc.NodeStatusRequest{
+		Message: &hydrarpc.Event_NodeStatusMessage{
+			NodeStatusMessage: &hydrarpc.NodeStatusMessage{
 				Status: hydrarpc.Status_RUNNING,
 			},
 		},
@@ -59,14 +59,14 @@ func Run() error {
 	time.Sleep(time.Duration(rand.Intn(5000)) * time.Millisecond)
 
 	readyStatusEvent := &hydrarpc.Event{
-		Request: &hydrarpc.Event_NodeStatusRequest{
-			NodeStatusRequest: &hydrarpc.NodeStatusRequest{
+		Message: &hydrarpc.Event_NodeStatusMessage{
+			NodeStatusMessage: &hydrarpc.NodeStatusMessage{
 				Status: hydrarpc.Status_READY,
 			},
 		},
 	}
 	stream.Send(readyStatusEvent)
-	time.Sleep(time.Duration(rand.Intn(5000)) * time.Millisecond)
+	time.Sleep(time.Duration(rand.Intn(10)) * time.Second)
 
 	stream.CloseSend()
 	<-waitc

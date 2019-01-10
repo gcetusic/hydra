@@ -36,13 +36,13 @@ func (srv *HydraService) Execute(stream hydrarpc.Hydra_ExecuteServer) error {
 			return err
 		}
 
-		switch event.GetRequest().(type) {
-		case *hydrarpc.Event_NodeRegistrationRequest:
+		switch event.GetMessage().(type) {
+		case *hydrarpc.Event_NodeRegistrationMessage:
 			nodeID, _ = uuid.NewV4()
 			node := &hydrarpc.Node{
 				Id:      nodeID.String(),
-				Runtime: event.GetNodeRegistrationRequest().GetRuntime(),
-				Status:  event.GetNodeRegistrationRequest().GetStatus(),
+				Runtime: event.GetNodeRegistrationMessage().GetRuntime(),
+				Status:  event.GetNodeRegistrationMessage().GetStatus(),
 			}
 
 			nodes[node.Id] = node
@@ -51,8 +51,8 @@ func (srv *HydraService) Execute(stream hydrarpc.Hydra_ExecuteServer) error {
 			log.Printf(fmt.Sprintf("Status: %s", node.Status))
 			log.Printf(fmt.Sprintf("Number of nodes: %d", len(nodes)))
 
-		case *hydrarpc.Event_NodeStatusRequest:
-			nodes[nodeID.String()].Status = event.GetNodeStatusRequest().GetStatus()
+		case *hydrarpc.Event_NodeStatusMessage:
+			nodes[nodeID.String()].Status = event.GetNodeStatusMessage().GetStatus()
 			log.Printf("Node Status: %s", nodes[nodeID.String()].Status)
 		}
 	}
